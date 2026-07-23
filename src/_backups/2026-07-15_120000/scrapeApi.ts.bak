@@ -1,0 +1,62 @@
+// src/api/scrapeApi.ts
+const API_BASE = 'http://localhost:8000';
+
+export interface ScrapeRequest {
+  app_id: string;
+  app_name: string;
+  country: string;
+  pages: number;
+}
+
+export interface ScrapedReview {
+  source: string;
+  app_id: string;
+  app_name: string;
+  author: string;
+  title: string;
+  text: string;
+  rating: number;
+  version: string;
+  helpful_votes: number;
+  total_votes: number;
+  date: string;
+}
+
+// Backwards-compatible alias used across the app
+export type ReviewItem = ScrapedReview;
+
+export interface ScrapeResponse {
+  success: boolean;
+  app_name: string;
+  total_reviews: number;
+  reviews: ScrapedReview[];
+  scraped_at: string;
+  message: string;
+}
+
+export async function scrapeReviews(request: ScrapeRequest): Promise<ScrapeResponse> {
+  const response = await fetch(`${API_BASE}/api/scrape`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Scraping failed');
+  }
+
+  const result: ScrapeResponse = await response.json();
+  
+  localStorage.setItem(`reviewpulse_app_${request.app_id}`, JSON.stringify({
+  appId: request.app_id,
+  appName: request.app_name,
+  reviews: result.reviews,
+  scrapedAt: result.scraped_at,
+  }));
+  
+  // Event sudah ada, biarkan
+  window.dispatchEvent(new CustomEvent('reviewpulse:data-updated'));
+  
+  return result;
+}
