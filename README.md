@@ -122,7 +122,7 @@ pnpm install
 pnpm dev
 ```
 
-The frontend runs at `http://localhost:5173` (Vite default).
+The frontend runs at `http://localhost:3000`
 
 ### 2. Backend (Scraper)
 
