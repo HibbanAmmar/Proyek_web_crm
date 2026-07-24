@@ -3,7 +3,6 @@
 **App Review Analytics Dashboard** — scrape, analyze, and understand what users are really saying about your app across the App Store.
 
 ![ReviewPulse Dashboard](src/Image/GambarReadme.png)
-&lt;!-- Replace/add your own screenshot at the path above --&gt;
 
 &gt; ⚠️ **Status: Testing / Beta.** This project is still in active development. Some parts (especially scraping and prediction models) may still change. See the [Known Limitations](#known-limitations) section before using for production needs.
 
